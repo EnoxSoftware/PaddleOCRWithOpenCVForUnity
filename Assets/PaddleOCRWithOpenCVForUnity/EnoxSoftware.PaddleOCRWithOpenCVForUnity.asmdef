@@ -1,0 +1,17 @@
+{
+    "name": "EnoxSoftware.PaddleOCRWithOpenCVForUnity",
+    "rootNamespace": "",
+    "references": [
+        "EnoxSoftware.OpenCVForUnity",
+        "Unity.InferenceEngine"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
