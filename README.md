@@ -1,5 +1,7 @@
 # PaddleOCR With OpenCV for Unity
 
+[![PaddleOCR with OpenCV for Unity Video](http://img.youtube.com/vi/PGVXKgh9Trw/0.jpg)](https://www.youtube.com/watch?v=PGVXKgh9Trw)
+
 ![PaddleOCRWithOpenCVForUnity](https://github.com/user-attachments/assets/12f5c9e1-1478-4acb-ac8e-66b474d0520d)
 
 ## Overview
