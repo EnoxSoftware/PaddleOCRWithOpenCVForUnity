@@ -165,8 +165,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36d4d4158fa243e41ae0673fc6ca6d1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InferenceBackend: 0
-  SentisBackend: 256
+  InferenceFramework: 1
+  SentisTarget: 0
   _useAsyncInference: 1
   StreamingAssetsRootFolder: PaddleOCRWithOpenCVForUnity
   DetModelOnnx: PP-OCRv5_mobile_det_infer_640x640.onnx
@@ -235,16 +235,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5784381}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f0a03d5b67aadc48be08caa7bba0508, type: 3}
+  m_Script: {fileID: 11500000, guid: 1cc7ba3dda323c5449601e8aedafb17b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: EnoxSoftware.PaddleOCRWithOpenCVForUnityExample::PaddleOCRWithOpenCVForUnityExample.FpsMonitor
+  m_EditorClassIdentifier: EnoxSoftware.OpenCVForUnity::OpenCVForUnity.UnityIntegration.Helper.UI.FpsMonitor
   AlignmentSetting: 1
-  Offset: {x: 10, y: 10}
   BoxVisible: 1
-  BoxWidth: 190
-  BoxHeight: 130
-  Padding: {x: 10, y: 10}
-  ConsoleHeight: 100
 --- !u!1 &433884704
 GameObject:
   m_ObjectHideFlags: 0

@@ -709,16 +709,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1709852081}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f0a03d5b67aadc48be08caa7bba0508, type: 3}
+  m_Script: {fileID: 11500000, guid: 1cc7ba3dda323c5449601e8aedafb17b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: EnoxSoftware.OpenCVForUnity::OpenCVForUnity.UnityIntegration.Helper.UI.FpsMonitor
   AlignmentSetting: 2
-  Offset: {x: 10, y: 10}
   BoxVisible: 1
-  BoxWidth: 190
-  BoxHeight: 100
-  Padding: {x: 10, y: 10}
-  ConsoleHeight: 100
 --- !u!114 &1709852092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -753,8 +748,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36d4d4158fa243e41ae0673fc6ca6d1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InferenceBackend: 0
-  SentisBackend: 256
+  InferenceFramework: 1
+  SentisTarget: 0
   _useAsyncInference: 1
   StreamingAssetsRootFolder: PaddleOCRWithOpenCVForUnity
   DetModelOnnx: PP-OCRv5_mobile_det_infer_640x640.onnx
@@ -1406,9 +1401,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2727736827105571823}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9060f2ce53190544fa1d3876cfba7e90, type: 3}
+  m_Script: {fileID: 11500000, guid: 11cf1831fd47e4d4aa9b654fb5f2d34b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: EnoxSoftware.PaddleOCRWithOpenCVForUnityExample::PaddleOCRWithOpenCVForUnityExample.TextureSelector
+  m_EditorClassIdentifier: EnoxSoftware.OpenCVForUnity::OpenCVForUnity.UnityIntegration.Helper.Interaction.TextureSelector
   _selectionMode: 0
   _targetCamera: {fileID: 0}
   _useOpenCVMatCoordinates: 1

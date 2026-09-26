@@ -1,19 +1,23 @@
-#if !UNITY_WSA_10_0 && NET_STANDARD_2_1 && !OPENCV_DONT_USE_UNSAFE_CODE
+#if !UNITY_WSA_10_0
 
 using System;
 using System.Linq;
 using System.Threading;
 using OpenCVForUnity.CoreModule;
 using OpenCVForUnity.DnnModule;
+using OpenCVForUnity.Extensions;
+using OpenCVForUnity.Extensions.Runner;
+using OpenCVForUnity;
 using OpenCVForUnity.ImgprocModule;
 using OpenCVForUnity.UnityIntegration;
-using OpenCVForUnity.UnityIntegration.Runner;
+using OpenCVForUnity.UnityIntegration.Helper.UI;
 using OpenCVForUnity.UnityIntegration.Worker.DnnModule;
 using PaddleOCRWithOpenCVForUnity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using OpenCVDebug = OpenCVForUnity.Extensions.OpenCVDebug;
 
 namespace PaddleOCRWithOpenCVForUnityExample
 {
@@ -76,13 +80,13 @@ namespace PaddleOCRWithOpenCVForUnityExample
 
             if (PaddleOCR == null)
             {
-                Debug.LogError($"{nameof(BenchmarkExample)}: {nameof(PaddleOCRComponent)} is not assigned.");
+                EngineLog.LogError($"{nameof(BenchmarkExample)}: {nameof(PaddleOCRComponent)} is not assigned.");
                 return;
             }
 
             if (FpsMonitor == null)
             {
-                Debug.LogError($"{nameof(BenchmarkExample)}: {nameof(FpsMonitor)} is not assigned.");
+                EngineLog.LogError($"{nameof(BenchmarkExample)}: {nameof(FpsMonitor)} is not assigned.");
                 return;
             }
 
@@ -90,7 +94,7 @@ namespace PaddleOCRWithOpenCVForUnityExample
             await PaddleOCR.WaitForInitializationAsync();
             if (!PaddleOCR.IsInitialized)
             {
-                Debug.LogWarning($"{nameof(BenchmarkExample)}: {nameof(PaddleOCRComponent)} is not initialized.");
+                EngineLog.LogWarning($"{nameof(BenchmarkExample)}: {nameof(PaddleOCRComponent)} is not initialized.");
                 return;
             }
 
@@ -139,7 +143,7 @@ namespace PaddleOCRWithOpenCVForUnityExample
             if (kind != WorkCompletionKind.Succeeded)
             {
                 if (kind == WorkCompletionKind.Faulted && !string.IsNullOrEmpty(errorMessage))
-                    Debug.LogWarning($"{nameof(BenchmarkExample)} OCR: {errorMessage}");
+                    EngineLog.LogWarning($"{nameof(BenchmarkExample)} OCR: {errorMessage}");
                 return;
             }
 
@@ -185,7 +189,7 @@ namespace PaddleOCRWithOpenCVForUnityExample
         {
             if (InputTexture == null)
             {
-                Debug.LogError($"{nameof(BenchmarkExample)}: Input Texture2D is not assigned.");
+                EngineLog.LogError($"{nameof(BenchmarkExample)}: Input Texture2D is not assigned.");
                 return;
             }
 
@@ -203,7 +207,7 @@ namespace PaddleOCRWithOpenCVForUnityExample
 
             if (!PaddleOCR.Submit(_bgrMat))
             {
-                Debug.LogWarning($"{nameof(BenchmarkExample)}: Submit failed (not initialized?).");
+                EngineLog.LogWarning($"{nameof(BenchmarkExample)}: Submit failed (not initialized?).");
                 _inferenceTimingActive = false;
                 UpdateFpsMonitorInferenceMs("-");
                 return;
@@ -249,7 +253,7 @@ namespace PaddleOCRWithOpenCVForUnityExample
                 _bgrMat = new Mat(height, width, CvType.CV_8UC3);
             }
 
-            OpenCVMatUtils.Texture2DToMat(InputTexture, _rgbaMat);
+            OpenCVMatUnityUtils.Texture2DToMat(InputTexture, _rgbaMat);
             Imgproc.cvtColor(_rgbaMat, _bgrMat, Imgproc.COLOR_RGBA2BGR);
 
             _displayBgrMat?.Dispose();
@@ -338,7 +342,7 @@ namespace PaddleOCRWithOpenCVForUnityExample
                     _outputTexture = new Texture2D(rgbMat.cols(), rgbMat.rows(), TextureFormat.RGB24, false);
                 }
 
-                OpenCVMatUtils.MatToTexture2D(rgbMat, _outputTexture);
+                OpenCVMatUnityUtils.MatToTexture2D(rgbMat, _outputTexture);
             }
 
             ResultPreview.texture = _outputTexture;
@@ -372,20 +376,24 @@ namespace PaddleOCRWithOpenCVForUnityExample
         }
 
         /// <summary>
-        /// Shows DNN backend, target, and async inference settings on <see cref="FpsMonitor"/>.
+        /// Shows inference framework, DNN backend, target, and async inference settings on <see cref="FpsMonitor"/>.
         /// </summary>
         private void UpdateFpsMonitorInferenceInfo()
         {
             if (PaddleOCR == null)
                 return;
 
-            TextDetector detector = PaddleOCR.Detector;
+            FpsMonitor.Add(
+                "inferenceFramework",
+                InferenceFrameworkUtils.GetSelectionDisplayName(PaddleOCR.InferenceFramework));
+
+            TextDetectorMultiBackend detector = PaddleOCR.Detector;
             if (detector != null)
             {
                 int be = detector.DnnBackend;
                 int tgt = detector.DnnTarget;
-                FpsMonitor.Add("dnnBackend", MultiBackendDnn.GetBackendDisplayString(be));
-                FpsMonitor.Add("dnnTarget", MultiBackendDnn.GetTargetDisplayString(tgt));
+                FpsMonitor.Add("dnnBackend", MultiBackendNet.GetBackendDisplayString(be));
+                FpsMonitor.Add("dnnTarget", MultiBackendNet.GetTargetDisplayString(tgt));
             }
             else
             {

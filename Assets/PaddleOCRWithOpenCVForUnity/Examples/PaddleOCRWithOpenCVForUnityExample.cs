@@ -9,6 +9,9 @@ namespace PaddleOCRWithOpenCVForUnityExample
     public class PaddleOCRWithOpenCVForUnityExample : MonoBehaviour
     {
         // Constants
+#if UNITY_6000_5_OR_NEWER
+        [Unity.Scripting.LifecycleManagement.NoAutoStaticsCleanup]
+#endif
         private static float VERTICAL_NORMALIZED_POSITION = 1f;
 
         // Public Fields
@@ -18,7 +21,7 @@ namespace PaddleOCRWithOpenCVForUnityExample
         // Unity Lifecycle Methods
         private void Start()
         {
-            VersionInfo.text = Core.NATIVE_LIBRARY_NAME + " " + OpenCVEnv.GetVersion() + " (" + Core.VERSION + ")";
+            VersionInfo.text = Core.NATIVE_LIBRARY_NAME + " " + OpenCVForUnityEnv.GetVersion() + " (" + Core.VERSION + ")";
             VersionInfo.text += " / UnityEditor " + Application.unityVersion;
             VersionInfo.text += " / ";
 
@@ -84,9 +87,9 @@ namespace PaddleOCRWithOpenCVForUnityExample
             SceneManager.LoadScene("BenchmarkExample");
         }
 
-        public void OnMultiSource2MatHelperExampleExampleButtonClick()
+        public void OnMultiSourceToMatHelperExampleButtonClick()
         {
-            SceneManager.LoadScene("MultiSource2MatHelperExample");
+            SceneManager.LoadScene("MultiSourceToMatHelperExample");
         }
 
         public void OnHandwritingOCRExampleButtonClick()

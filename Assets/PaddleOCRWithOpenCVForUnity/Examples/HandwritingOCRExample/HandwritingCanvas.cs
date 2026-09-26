@@ -1,6 +1,7 @@
 using OpenCVForUnity.CoreModule;
 using OpenCVForUnity.ImgprocModule;
 using OpenCVForUnity.UnityIntegration;
+using OpenCVForUnity.UnityIntegration.Helper.Interaction;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -52,6 +53,9 @@ namespace PaddleOCRWithOpenCVForUnityExample
         /// <summary>Maximum line thickness (integer passed to Imgproc.line).</summary>
         public const int MAX_LINE_THICKNESS = 50;
 
+#if UNITY_6000_5_OR_NEWER
+        [Unity.Scripting.LifecycleManagement.NoAutoStaticsCleanup]
+#endif
         private static readonly Scalar BACKGROUND_COLOR = new Scalar(255, 255, 255, 255);
 
         // Public Fields
@@ -84,7 +88,7 @@ namespace PaddleOCRWithOpenCVForUnityExample
             _canvasMat = new Mat(CANVAS_SIZE, CANVAS_SIZE, CvType.CV_8UC4, BACKGROUND_COLOR);
 
             _texture = new Texture2D(CANVAS_SIZE, CANVAS_SIZE, TextureFormat.RGBA32, false);
-            OpenCVMatUtils.MatToTexture2D(_canvasMat, _texture);
+            OpenCVMatUnityUtils.MatToTexture2D(_canvasMat, _texture);
 
             _rawImage.texture = _texture;
         }
@@ -207,7 +211,7 @@ namespace PaddleOCRWithOpenCVForUnityExample
 
         private void PushToTexture()
         {
-            OpenCVMatUtils.MatToTexture2D(_canvasMat, _texture);
+            OpenCVMatUnityUtils.MatToTexture2D(_canvasMat, _texture);
         }
 
         private Scalar GetStrokeScalar()

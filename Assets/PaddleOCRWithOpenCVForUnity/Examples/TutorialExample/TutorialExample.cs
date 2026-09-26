@@ -1,9 +1,11 @@
-#if !UNITY_WSA_10_0 && NET_STANDARD_2_1 && !OPENCV_DONT_USE_UNSAFE_CODE
+#if !UNITY_WSA_10_0
 
 using System.Linq;
+using OpenCVForUnity;
 using OpenCVForUnity.CoreModule;
+using OpenCVForUnity.Extensions;
+using OpenCVForUnity.Extensions.Runner;
 using OpenCVForUnity.UnityIntegration;
-using OpenCVForUnity.UnityIntegration.Runner;
 using PaddleOCRWithOpenCVForUnity;
 using TMPro;
 using UnityEngine;
@@ -68,13 +70,13 @@ namespace PaddleOCRWithOpenCVForUnityExample
 
             if (PaddleOCR == null)
             {
-                Debug.LogError($"{nameof(TutorialExample)}: {nameof(PaddleOCRComponent)} is not assigned.");
+                EngineLog.LogError($"{nameof(TutorialExample)}: {nameof(PaddleOCRComponent)} is not assigned.");
                 return;
             }
 
             if (InputTexture == null)
             {
-                Debug.LogWarning($"{nameof(TutorialExample)}: Input Texture2D is not assigned.");
+                EngineLog.LogWarning($"{nameof(TutorialExample)}: Input Texture2D is not assigned.");
                 return;
             }
 
@@ -91,7 +93,7 @@ namespace PaddleOCRWithOpenCVForUnityExample
 
             if (!PaddleOCR.IsInitialized)
             {
-                Debug.LogWarning($"{nameof(TutorialExample)}: {nameof(PaddleOCRComponent)} is not initialized. OCR skipped.");
+                EngineLog.LogWarning($"{nameof(TutorialExample)}: {nameof(PaddleOCRComponent)} is not initialized. OCR skipped.");
                 return;
             }
 
@@ -136,9 +138,9 @@ namespace PaddleOCRWithOpenCVForUnityExample
             if (result.Kind != WorkCompletionKind.Succeeded)
             {
                 if (!string.IsNullOrEmpty(result.ErrorMessage))
-                    Debug.LogWarning($"{nameof(TutorialExample)} OCR {result.Kind}: {result.ErrorMessage}");
+                    EngineLog.LogWarning($"{nameof(TutorialExample)} OCR {result.Kind}: {result.ErrorMessage}");
                 else
-                    Debug.Log($"{nameof(TutorialExample)} OCR {result.Kind}");
+                    EngineLog.Log($"{nameof(TutorialExample)} OCR {result.Kind}");
                 return;
             }
 
@@ -202,7 +204,7 @@ namespace PaddleOCRWithOpenCVForUnityExample
 
             using (Mat rgbMat = new Mat(height, width, CvType.CV_8UC3))
             {
-                OpenCVMatUtils.Texture2DToMat(InputTexture, rgbMat);
+                OpenCVMatUnityUtils.Texture2DToMat(InputTexture, rgbMat);
 
                 // --- 4. (Optional) Visualize results ---
                 // PaddleOCRPipelineUtility.VisualizeOCRResults … draws boxes and text on the Mat.
@@ -214,7 +216,7 @@ namespace PaddleOCRWithOpenCVForUnityExample
                     isRGB: true);
 
                 Texture2D previewTexture = new Texture2D(width, height, TextureFormat.RGB24, false);
-                OpenCVMatUtils.MatToTexture2D(rgbMat, previewTexture);
+                OpenCVMatUnityUtils.MatToTexture2D(rgbMat, previewTexture);
 
                 ResultPreview.texture = previewTexture;
 

@@ -1,19 +1,23 @@
-#if !UNITY_WSA_10_0 && NET_STANDARD_2_1 && !OPENCV_DONT_USE_UNSAFE_CODE
+#if !UNITY_WSA_10_0
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using OpenCVForUnity;
 using OpenCVForUnity.CoreModule;
+using OpenCVForUnity.Extensions;
+using OpenCVForUnity.Extensions.Runner;
 using OpenCVForUnity.ImgprocModule;
 using OpenCVForUnity.UnityIntegration;
-using OpenCVForUnity.UnityIntegration.Runner;
+using OpenCVForUnity.UnityIntegration.Helper.UI;
 using OpenCVForUnity.UnityIntegration.Worker.DnnModule;
 using PaddleOCRWithOpenCVForUnity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using OpenCVDebug = OpenCVForUnity.Extensions.OpenCVDebug;
 
 namespace PaddleOCRWithOpenCVForUnityExample
 {
@@ -89,7 +93,7 @@ namespace PaddleOCRWithOpenCVForUnityExample
 
             if (PaddleOCR == null)
             {
-                Debug.LogError($"{nameof(HandwritingOCRExample)}: {nameof(PaddleOCRComponent)} is missing.");
+                EngineLog.LogError($"{nameof(HandwritingOCRExample)}: {nameof(PaddleOCRComponent)} is missing.");
                 return;
             }
 
@@ -97,7 +101,7 @@ namespace PaddleOCRWithOpenCVForUnityExample
             await PaddleOCR.WaitForInitializationAsync();
             if (!PaddleOCR.IsInitialized)
             {
-                Debug.LogWarning($"{nameof(HandwritingOCRExample)}: {nameof(PaddleOCRComponent)} is not initialized.");
+                EngineLog.LogWarning($"{nameof(HandwritingOCRExample)}: {nameof(PaddleOCRComponent)} is not initialized.");
                 return;
             }
 
@@ -302,7 +306,7 @@ namespace PaddleOCRWithOpenCVForUnityExample
             if (result.Kind != WorkCompletionKind.Succeeded)
             {
                 if (result.Kind == WorkCompletionKind.Faulted && !string.IsNullOrEmpty(result.ErrorMessage))
-                    Debug.LogWarning($"{nameof(HandwritingOCRExample)} OCR: {result.ErrorMessage}");
+                    EngineLog.LogWarning($"{nameof(HandwritingOCRExample)} OCR: {result.ErrorMessage}");
                 TrySubmitPendingOnceOCR();
                 return;
             }
@@ -321,7 +325,7 @@ namespace PaddleOCRWithOpenCVForUnityExample
                     RecognitionResultField.verticalScrollbar.value = 0;
             }
 
-            Debug.Log(recognitionText);
+            EngineLog.Log(recognitionText);
 
             TrySubmitPendingOnceOCR();
         }
@@ -488,20 +492,24 @@ namespace PaddleOCRWithOpenCVForUnityExample
         }
 
         /// <summary>
-        /// Displays DNN backend, target, and async inference settings on <see cref="FpsMonitor"/>.
+        /// Displays inference framework, DNN backend, target, and async inference settings on <see cref="FpsMonitor"/>.
         /// </summary>
         private void UpdateFpsMonitorInferenceInfo()
         {
             if (FpsMonitor == null || PaddleOCR == null)
                 return;
 
-            TextDetector detector = PaddleOCR.Detector;
+            FpsMonitor.Add(
+                "inferenceFramework",
+                InferenceFrameworkUtils.GetSelectionDisplayName(PaddleOCR.InferenceFramework));
+
+            TextDetectorMultiBackend detector = PaddleOCR.Detector;
             if (detector != null)
             {
                 int be = detector.DnnBackend;
                 int tgt = detector.DnnTarget;
-                FpsMonitor.Add("dnnBackend", MultiBackendDnn.GetBackendDisplayString(be));
-                FpsMonitor.Add("dnnTarget", MultiBackendDnn.GetTargetDisplayString(tgt));
+                FpsMonitor.Add("dnnBackend", MultiBackendNet.GetBackendDisplayString(be));
+                FpsMonitor.Add("dnnTarget", MultiBackendNet.GetTargetDisplayString(tgt));
             }
             else
             {
